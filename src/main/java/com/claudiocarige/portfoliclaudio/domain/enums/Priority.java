@@ -1,13 +1,13 @@
 package com.claudiocarige.portfoliclaudio.domain.enums;
 
-public enum Perfil {
+public enum Priority {
 	
-	ADMIN(0, "ROLE_ADMIN"), CLIENTE(1, "ROLE_CLIENTE"), FUNCIONARIO(2, "ROLE_FUNCIONARIO");
+	BAIXA(0, "BAIXA"), MEDIA(1, "MEDIA"), ALTA(2, "ALTA");
 	
 	private Integer codigo;
 	private String descricao;
 
-	private Perfil(Integer codigo, String descricao) {
+	private Priority(Integer codigo, String descricao) {
 		this.codigo = codigo;
 		this.descricao = descricao;
 	}
@@ -19,15 +19,15 @@ public enum Perfil {
 		return descricao;
 	}
 	
-	public static Perfil toEnum(Integer codigo) {
+	public static Priority toEnum(Integer codigo) {
 		if(codigo == null) {
 			return null;
 		}
-			for(Perfil x: Perfil.values()) {
+			for(Priority x: Priority.values()) {
 				if(codigo.equals(x.getCodigo())) {
 					return x;
 				}
 			}
-			throw new IllegalArgumentException("Perfil inválido");
+			throw new IllegalArgumentException("Prioridade inválida");
 	}
 }
