@@ -1,5 +1,6 @@
 package com.claudiocarige.portfoliclaudio.domian;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -8,8 +9,18 @@ import java.util.stream.Collectors;
 
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 
-public abstract class Person {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
+public abstract class Person implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
 	protected String name;
 	protected String cpf;
@@ -20,7 +31,6 @@ public abstract class Person {
 	
 	public Person() {
 		super();
-		addProfile(Profile.CLIENTE);
 	}
 
 	public Person(Integer id, String name, String cpf, String email, String password) {
@@ -30,7 +40,6 @@ public abstract class Person {
 		this.cpf = cpf;
 		this.email = email;
 		this.password = password;
-		addProfile(Profile.CLIENTE);
 	}
 
 	public Integer getId() {

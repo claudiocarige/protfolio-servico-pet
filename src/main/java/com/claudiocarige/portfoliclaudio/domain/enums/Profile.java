@@ -2,7 +2,7 @@ package com.claudiocarige.portfoliclaudio.domain.enums;
 
 public enum Profile {
 	
-	ADMIN(0, "ROLE_ADMIN"), CLIENTE(1, "ROLE_CLIENTE"), FUNCIONARIO(2, "ROLE_FUNCIONARIO");
+	ADMIN(0, "ROLE_ADMIN"), CLIENT(1, "ROLE_CLIENTE"), EMPLOYEE(2, "ROLE_FUNCIONARIO");
 	
 	private Integer codigo;
 	private String descricao;
