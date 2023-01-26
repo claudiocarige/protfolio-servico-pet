@@ -8,8 +8,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,11 +27,20 @@ public abstract class Person implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
-	protected String name;
+	protected String name; 
+	
+	@Column(unique = true)
 	protected String cpf;
+	
+	@Column(unique = true)
 	protected String email;
 	protected String password;
+	
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "PROFILE")
 	protected Set<Integer> profile = new HashSet<>();
+	
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate createDate = LocalDate.now();
 	
 	public Person() {
