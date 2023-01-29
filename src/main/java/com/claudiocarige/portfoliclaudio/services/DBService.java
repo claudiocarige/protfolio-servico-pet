@@ -44,8 +44,8 @@ public class DBService {
 		ServicesPet ServPet2 = new ServicesPet(null, Priority.ALTA, Status.ABERTO, "Banho", "Banho simples", client2, employee3);
 		ServicesPet ServPet3 = new ServicesPet(null, Priority.BAIXA, Status.ABERTO, "Banho", "Banho completo", client3, employee2);
 		
-		clientRepository.saveAll(Arrays.asList(client1,client2,client3,client4,client5,client6));
 		employeeRepository.saveAll(Arrays.asList(employee1, employee2, employee3, employee4, employee5));
+		clientRepository.saveAll(Arrays.asList(client1,client2,client3,client4,client5,client6));
 		petRpository.saveAll(Arrays.asList(ServPet1, ServPet2, ServPet3));
 	}
 }

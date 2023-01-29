@@ -10,13 +10,13 @@ import com.claudiocarige.portfoliclaudio.services.DBService;
 @Configuration
 @Profile("test")
 public class TestConfig {
-	
+
 	@Autowired
 	private DBService dbService;
-	
+
 	@Bean
 	public void startDB() {
-		this.dbService.startDB();	
+		this.dbService.startDB();
 	}
 
 }
