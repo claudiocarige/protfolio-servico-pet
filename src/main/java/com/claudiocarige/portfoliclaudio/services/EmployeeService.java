@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.claudiocarige.portfoliclaudio.domian.Employee;
 import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
+import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class EmployeeService {
@@ -17,7 +18,7 @@ public class EmployeeService {
 	
 	public Employee findById(Integer id) {
 		Optional<Employee> employee = repository.findById(id);
-		return employee.orElse(null);
+		return employee.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado Id: " + id));
 	}
 	
 	public List<Employee> findAll(){

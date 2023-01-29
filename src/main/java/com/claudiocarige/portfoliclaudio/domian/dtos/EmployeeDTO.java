@@ -83,8 +83,8 @@ public class EmployeeDTO implements Serializable {
 		return profile.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
 	}
 
-	public void setProfile(Set<Integer> profile) {
-		this.profile = profile;
+	public void addProfile(Profile profile) {
+		this.profile.add(profile.getCodigo());
 	}
 
 	public LocalDate getCreateDate() {
