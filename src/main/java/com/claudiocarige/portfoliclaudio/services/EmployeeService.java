@@ -24,9 +24,5 @@ public class EmployeeService {
 		return repository.findAll();
 	}
 	
-	public void create(Employee obj) {
-		if(obj.getId() == null) {
-			repository.save(obj);
-		}
-	}
+
 }
