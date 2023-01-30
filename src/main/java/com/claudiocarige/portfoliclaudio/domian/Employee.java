@@ -2,8 +2,10 @@ package com.claudiocarige.portfoliclaudio.domian;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
+import com.claudiocarige.portfoliclaudio.domian.dtos.EmployeeDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -28,6 +30,17 @@ public class Employee extends Person {
 		addProfile(Profile.EMPLOYEE);
 	}
 
+	public Employee(EmployeeDTO obj) {
+		super();
+		this.id = obj.getId();
+		this.name = obj.getName();
+		this.cpf = obj.getCpf();
+		this.email = obj.getEmail();
+		this.password = obj.getPassword();
+		this.profile = obj.getProfile().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
+		this.createDate = obj.getCreateDate();
+	}
+	
 	public List<ServicesPet> getServicePet() {
 		return servicePet;
 	}

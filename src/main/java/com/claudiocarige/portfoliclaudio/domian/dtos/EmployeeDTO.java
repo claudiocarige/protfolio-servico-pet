@@ -26,6 +26,7 @@ public class EmployeeDTO implements Serializable {
 
 	public EmployeeDTO() {
 		super();
+		addProfile(Profile.EMPLOYEE);
 	}
 
 	public EmployeeDTO(Employee obj) {
@@ -37,6 +38,7 @@ public class EmployeeDTO implements Serializable {
 		this.password = obj.getPassword();
 		this.profile = obj.getProfile().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
 		this.createDate = obj.getCreateDate();
+		addProfile(Profile.EMPLOYEE);
 	}
 
 	public Integer getId() {

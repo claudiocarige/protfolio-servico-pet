@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.claudiocarige.portfoliclaudio.domian.Employee;
+import com.claudiocarige.portfoliclaudio.domian.dtos.EmployeeDTO;
 import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 
@@ -23,6 +24,12 @@ public class EmployeeService {
 	
 	public List<Employee> findAll(){
 		return repository.findAll();
+	}
+
+	public Employee create(EmployeeDTO objDTO) {
+		objDTO.setId(null);
+		Employee newEmployee = new Employee(objDTO);
+		return repository.save(newEmployee);
 	}
 	
 
