@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.claudiocarige.portfoliclaudio.domian.Employee;
+import com.claudiocarige.portfoliclaudio.domian.Person;
 import com.claudiocarige.portfoliclaudio.domian.dtos.EmployeeDTO;
 import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
+import com.claudiocarige.portfoliclaudio.repositories.PersonRepository;
+import com.claudiocarige.portfoliclaudio.services.exceptions.DataIntegrityViolationException;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -16,6 +19,9 @@ public class EmployeeService {
 	
 	@Autowired
 	private EmployeeRepository repository;
+	
+	@Autowired
+	private PersonRepository personRepository;
 	
 	public Employee findById(Integer id) {
 		Optional<Employee> employee = repository.findById(id);
@@ -28,8 +34,20 @@ public class EmployeeService {
 
 	public Employee create(EmployeeDTO objDTO) {
 		objDTO.setId(null);
+		validadorDeCpfEEmail(objDTO);
 		Employee newEmployee = new Employee(objDTO);
 		return repository.save(newEmployee);
+	}
+
+	private void validadorDeCpfEEmail(EmployeeDTO objDTO) {
+		Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());
+		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("CPF já cadastrado no sistema!");
+		}
+		obj = personRepository.findByEmail(objDTO.getEmail());
+		if(obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
+		}
 	}
 	
 
