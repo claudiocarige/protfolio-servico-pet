@@ -38,6 +38,14 @@ public class EmployeeService {
 		Employee newEmployee = new Employee(objDTO);
 		return repository.save(newEmployee);
 	}
+	
+	public Employee update(Integer id, EmployeeDTO objDTO) {
+		objDTO.setId(id);
+		Employee oldObj = findById(id);
+		validadorDeCpfEEmail(objDTO);
+		oldObj = new Employee(objDTO);
+		return repository.save(oldObj);
+	}
 
 	private void validadorDeCpfEEmail(EmployeeDTO objDTO) {
 		Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());

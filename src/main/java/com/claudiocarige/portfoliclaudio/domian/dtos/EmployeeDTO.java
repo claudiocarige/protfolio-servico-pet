@@ -10,14 +10,20 @@ import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.claudiocarige.portfoliclaudio.domian.Employee;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.validation.constraints.NotNull;
+
 public class EmployeeDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	protected Integer id;
+	@NotNull(message = "O campo NOME é requerido!")
 	protected String name;
+	@NotNull(message = "O campo CPF é requerido!")
 	protected String cpf;
+	@NotNull(message = "O campo EMAIL é requerido!")
 	protected String email;
+	@NotNull(message = "O campo SENHA é requerido!")
 	protected String password;
 	protected Set<Integer> profile = new HashSet<>();
 
