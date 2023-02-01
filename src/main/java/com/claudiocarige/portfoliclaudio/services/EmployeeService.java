@@ -46,6 +46,15 @@ public class EmployeeService {
 		oldObj = new Employee(objDTO);
 		return repository.save(oldObj);
 	}
+	
+	public void delete(Integer id) {
+		Employee obj = findById(id);
+		if(obj.getServicePet().size() > 0) {
+			throw new DataIntegrityViolationException("Este Funcionário possui ordem de serviço e não pode ser deletado!");
+		}else {
+			repository.deleteById(id); 			
+		}
+	}
 
 	private void validadorDeCpfEEmail(EmployeeDTO objDTO) {
 		Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());
@@ -57,6 +66,8 @@ public class EmployeeService {
 			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
 		}
 	}
+
+
 	
 
 }
