@@ -1,5 +1,6 @@
 package com.claudiocarige.portfoliclaudio.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,13 @@ public class ServicePetService {
 		return repository.save(newServicesPet(objDTO));
 	}
 
+	public ServicesPet update(Integer id, @Valid ServicePetDTO objDTO) {
+		objDTO.setId(id);
+		ServicesPet oldServicesPet = findById(id);
+		oldServicesPet = newServicesPet(objDTO);
+		return repository.save(oldServicesPet);
+	}
+
 	public ServicesPet newServicesPet(ServicePetDTO objDTO) {
 		Employee employee = employeeService.findById(objDTO.getEmployee());
 		Client client = clientService.findById(objDTO.getClient());
@@ -49,6 +57,10 @@ public class ServicePetService {
 		ServicesPet servicesPet = new ServicesPet();
 		if (objDTO.getId() != null) {
 			servicesPet.setId(objDTO.getId());
+		}
+
+		if (objDTO.getStatus().equals(2)) {
+			servicesPet.setClosingDate(LocalDate.now());
 		}
 		servicesPet.setClient(client);
 		servicesPet.setEmployee(employee);
@@ -58,5 +70,4 @@ public class ServicePetService {
 		servicesPet.setComments(objDTO.getComments());
 		return servicesPet;
 	}
-
 }
