@@ -1,5 +1,6 @@
 package com.claudiocarige.portfoliclaudio.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class ServicePetService {
 	public ServicesPet findById(Integer id) {
 		Optional<ServicesPet> servicePet = repository.findById(id);
 		return servicePet.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado ID: " + id));
+	}
+
+	public List<ServicesPet> finAll() {
+		return repository.findAll();
 	}
 
 }
