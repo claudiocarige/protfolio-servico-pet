@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.validation.constraints.NotNull;
+
 public class ServicePetDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -15,11 +17,17 @@ public class ServicePetDTO implements Serializable {
 	private LocalDate openingDate = LocalDate.now();
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate closingDate;
+	@NotNull(message = "O Campo PRIORIDADE é requerido")
 	private Integer priority;
+	@NotNull(message = "O Campo STATUS é requerido")
 	private Integer status;
+	@NotNull(message = "O Campo TIPO DE SERVIÇO é requerido")
 	private String title;
+	@NotNull(message = "O Campo DESCRIÇÃO é requerido")
 	private String comments;
+	@NotNull(message = "O Campo FUNCIONÁRIO é requerido")
 	private Integer employee;
+	@NotNull(message = "O Campo CLIENTE é requerido")
 	private Integer client;
 	private String nameEmploye;
 	private String nameClient;
