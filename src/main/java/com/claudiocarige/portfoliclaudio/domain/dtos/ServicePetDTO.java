@@ -3,10 +3,12 @@ package com.claudiocarige.portfoliclaudio.domain.dtos;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.validation.constraints.NotNull;
+
 import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.validation.constraints.NotNull;
+
 
 public class ServicePetDTO implements Serializable {
 

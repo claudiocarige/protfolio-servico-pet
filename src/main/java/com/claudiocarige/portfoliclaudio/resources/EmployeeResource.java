@@ -20,7 +20,7 @@ import com.claudiocarige.portfoliclaudio.domain.Employee;
 import com.claudiocarige.portfoliclaudio.domain.dtos.EmployeeDTO;
 import com.claudiocarige.portfoliclaudio.services.EmployeeService;
 
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/employeies")

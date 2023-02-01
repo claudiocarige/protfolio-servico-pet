@@ -12,7 +12,7 @@ import com.claudiocarige.portfoliclaudio.domain.Employee;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import jakarta.validation.constraints.NotNull;
+import javax.validation.constraints.NotNull;
 
 public class EmployeeDTO implements Serializable {
 

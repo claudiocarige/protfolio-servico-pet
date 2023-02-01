@@ -19,7 +19,7 @@ import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
 import com.claudiocarige.portfoliclaudio.domain.dtos.ServicePetDTO;
 import com.claudiocarige.portfoliclaudio.services.ServicePetService;
 
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/servicepet")

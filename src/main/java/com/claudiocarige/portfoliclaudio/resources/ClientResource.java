@@ -20,7 +20,7 @@ import com.claudiocarige.portfoliclaudio.domain.Client;
 import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
 import com.claudiocarige.portfoliclaudio.services.ClientService;
 
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/clients")
