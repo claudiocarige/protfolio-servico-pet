@@ -1,4 +1,4 @@
-package com.claudiocarige.portfoliclaudio.domian.dtos;
+package com.claudiocarige.portfoliclaudio.domain.dtos;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -6,19 +6,22 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.validator.constraints.br.CPF;
+
+import com.claudiocarige.portfoliclaudio.domain.Client;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
-import com.claudiocarige.portfoliclaudio.domian.Employee;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotNull;
 
-public class EmployeeDTO implements Serializable {
+public class ClientDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	protected Integer id;
 	@NotNull(message = "O campo NOME é requerido!")
 	protected String name;
+	@CPF
 	@NotNull(message = "O campo CPF é requerido!")
 	protected String cpf;
 	@NotNull(message = "O campo EMAIL é requerido!")
@@ -30,12 +33,12 @@ public class EmployeeDTO implements Serializable {
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate createDate = LocalDate.now();
 
-	public EmployeeDTO() {
+	public ClientDTO() {
 		super();
-		addProfile(Profile.EMPLOYEE);
+		addProfile(Profile.CLIENT);
 	}
 
-	public EmployeeDTO(Employee obj) {
+	public ClientDTO(Client obj) {
 		super();
 		this.id = obj.getId();
 		this.name = obj.getName();
@@ -44,7 +47,7 @@ public class EmployeeDTO implements Serializable {
 		this.password = obj.getPassword();
 		this.profile = obj.getProfile().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
 		this.createDate = obj.getCreateDate();
-		addProfile(Profile.EMPLOYEE);
+		addProfile(Profile.CLIENT);
 	}
 
 	public Integer getId() {

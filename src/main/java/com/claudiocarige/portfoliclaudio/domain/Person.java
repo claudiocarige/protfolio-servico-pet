@@ -1,4 +1,4 @@
-package com.claudiocarige.portfoliclaudio.domian;
+package com.claudiocarige.portfoliclaudio.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -31,7 +31,6 @@ public abstract class Person implements Serializable{
 	protected Integer id;
 	protected String name; 
 	
-	@CPF
 	@Column(unique = true)
 	protected String cpf;
 	

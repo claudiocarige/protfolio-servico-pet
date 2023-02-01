@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.claudiocarige.portfoliclaudio.domian.Employee;
-import com.claudiocarige.portfoliclaudio.domian.dtos.EmployeeDTO;
+import com.claudiocarige.portfoliclaudio.domain.Employee;
+import com.claudiocarige.portfoliclaudio.domain.dtos.EmployeeDTO;
 import com.claudiocarige.portfoliclaudio.services.EmployeeService;
 
 import jakarta.validation.Valid;

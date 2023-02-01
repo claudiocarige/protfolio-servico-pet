@@ -1,4 +1,4 @@
-package com.claudiocarige.portfoliclaudio.domian;
+package com.claudiocarige.portfoliclaudio.domain;
 
 import java.io.Serializable;
 import java.time.LocalDate;

@@ -5,12 +5,12 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.claudiocarige.portfoliclaudio.domain.Client;
+import com.claudiocarige.portfoliclaudio.domain.Employee;
+import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
 import com.claudiocarige.portfoliclaudio.domain.enums.Priority;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.claudiocarige.portfoliclaudio.domain.enums.Status;
-import com.claudiocarige.portfoliclaudio.domian.Client;
-import com.claudiocarige.portfoliclaudio.domian.Employee;
-import com.claudiocarige.portfoliclaudio.domian.ServicesPet;
 import com.claudiocarige.portfoliclaudio.repositories.ClientRepository;
 import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
 import com.claudiocarige.portfoliclaudio.repositories.ServicesPetRepository;
