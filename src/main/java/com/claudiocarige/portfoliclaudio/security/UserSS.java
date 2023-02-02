@@ -2,7 +2,6 @@ package com.claudiocarige.portfoliclaudio.security;
 
 import java.util.Collection;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
