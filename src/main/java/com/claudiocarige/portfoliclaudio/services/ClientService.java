@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.claudiocarige.portfoliclaudio.domain.Client;
@@ -22,6 +23,9 @@ public class ClientService {
 
 	@Autowired
 	private PersonRepository personRepository;
+	
+	@Autowired
+	private BCryptPasswordEncoder encoder;
 
 	public Client findById(Integer id) {
 		Optional<Client> employee = repository.findById(id);
@@ -34,6 +38,7 @@ public class ClientService {
 
 	public Client create(ClientDTO objDTO) {
 		objDTO.setId(null);
+		objDTO.setPassword(encoder.encode(objDTO.getPassword()));
 		validadorDeCpfEEmail(objDTO);
 		Client newClient = new Client(objDTO);
 		return repository.save(newClient);
