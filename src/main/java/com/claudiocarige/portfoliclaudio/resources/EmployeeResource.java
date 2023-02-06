@@ -24,7 +24,7 @@ import com.claudiocarige.portfoliclaudio.services.EmployeeService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/employeies")
+@RequestMapping(value = "/employees")
 public class EmployeeResource {
 
 	@Autowired
