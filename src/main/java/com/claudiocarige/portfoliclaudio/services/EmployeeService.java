@@ -3,6 +3,8 @@ package com.claudiocarige.portfoliclaudio.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -47,7 +49,12 @@ public class EmployeeService {
 	public Employee update(Integer id, EmployeeDTO objDTO) {
 		objDTO.setId(id);
 		Employee oldObj = findById(id);
+		if(!objDTO.getPassword().equals(oldObj.getPassword())) {
+			objDTO.setPassword(encoder.encode(objDTO.getPassword()));
+		} 
 		validadorDeCpfEEmail(objDTO);
+		
+		
 		oldObj = new Employee(objDTO);
 		return repository.save(oldObj);
 	}
