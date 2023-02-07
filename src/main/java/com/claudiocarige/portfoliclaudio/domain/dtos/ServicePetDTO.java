@@ -9,7 +9,6 @@ import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
-
 public class ServicePetDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -139,5 +138,4 @@ public class ServicePetDTO implements Serializable {
 	public void setNameClient(String nameClient) {
 		this.nameClient = nameClient;
 	}
-
 }

@@ -9,5 +9,4 @@ public class PortfolioClaudioApplication{
 	public static void main(String[] args) {
 		SpringApplication.run(PortfolioClaudioApplication.class, args);
 	}
-
 }

@@ -53,5 +53,4 @@ public class ServicePetResource {
 		ServicesPet servicesPet = service.update(id, objDTO);
 		return ResponseEntity.ok().body(new ServicePetDTO(servicesPet));
 	}
-
 }

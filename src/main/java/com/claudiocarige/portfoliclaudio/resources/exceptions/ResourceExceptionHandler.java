@@ -13,7 +13,6 @@ import com.claudiocarige.portfoliclaudio.services.exceptions.DataIntegrityViolat
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 
 
-
 @ControllerAdvice
 public class ResourceExceptionHandler {
 
@@ -23,7 +22,6 @@ public class ResourceExceptionHandler {
 		StandardError erro = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(),
 				"Object not found", ex.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
-
 	}
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
@@ -32,7 +30,6 @@ public class ResourceExceptionHandler {
 		StandardError erro = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),
 				"Violação de dados", ex.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
-
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)

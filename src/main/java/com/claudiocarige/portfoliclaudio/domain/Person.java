@@ -128,6 +128,4 @@ public abstract class Person implements Serializable{
 		Person other = (Person) obj;
 		return Objects.equals(cpf, other.cpf) && Objects.equals(id, other.id);
 	}
-	
-	
 }

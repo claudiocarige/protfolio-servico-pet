@@ -16,7 +16,6 @@ import com.claudiocarige.portfoliclaudio.domain.enums.Status;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 
-
 @Entity
 public class ServicesPet implements Serializable {
 
@@ -149,5 +148,4 @@ public class ServicesPet implements Serializable {
 		ServicesPet other = (ServicesPet) obj;
 		return Objects.equals(id, other.id);
 	}
-
 }

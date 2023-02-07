@@ -1,7 +1,5 @@
 package com.claudiocarige.portfoliclaudio.security;
 
-
-
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;

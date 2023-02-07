@@ -65,7 +65,6 @@ public class EmployeeResource {
 	@DeleteMapping(value ="/{id}")
 	public ResponseEntity<EmployeeDTO> delete(@PathVariable Integer id){
 		service.delete(id);
-		return ResponseEntity.noContent().build();
-				
+		return ResponseEntity.noContent().build();	
 	}
 } 

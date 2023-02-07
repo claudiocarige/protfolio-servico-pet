@@ -11,12 +11,11 @@ import com.claudiocarige.portfoliclaudio.domain.dtos.EmployeeDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 @Entity
 public class Employee extends Person {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	@JsonIgnore
 	@OneToMany(mappedBy = "employee")
 	private List<ServicesPet> servicePet = new ArrayList<>();
@@ -41,7 +40,7 @@ public class Employee extends Person {
 		this.profile = obj.getProfile().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
 		this.createDate = obj.getCreateDate();
 	}
-	
+
 	public List<ServicesPet> getServicePet() {
 		return servicePet;
 	}
@@ -49,5 +48,4 @@ public class Employee extends Person {
 	public void setServicePet(List<ServicesPet> servicePet) {
 		this.servicePet = servicePet;
 	}
-
 }

@@ -3,8 +3,6 @@ package com.claudiocarige.portfoliclaudio.services;
 import java.util.List;
 import java.util.Optional;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,7 +29,7 @@ public class EmployeeService {
 
 	public Employee findById(Integer id) {
 		Optional<Employee> employee = repository.findById(id);
-		return employee.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado Id: " + id));
+		return employee.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado. Id: " + id));
 	}
 
 	public List<Employee> findAll() {
@@ -53,8 +51,6 @@ public class EmployeeService {
 			objDTO.setPassword(encoder.encode(objDTO.getPassword()));
 		} 
 		validadorDeCpfEEmail(objDTO);
-		
-		
 		oldObj = new Employee(objDTO);
 		return repository.save(oldObj);
 	}
