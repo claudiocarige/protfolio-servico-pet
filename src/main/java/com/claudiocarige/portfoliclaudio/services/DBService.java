@@ -52,9 +52,11 @@ public class DBService {
 		ServicesPet ServPet1 = new ServicesPet(null, Priority.MEDIA, Status.ANDAMENTO, "Tosa", "Tosa a seco", client1, employee1);
 		ServicesPet ServPet2 = new ServicesPet(null, Priority.ALTA, Status.ABERTO, "Banho", "Banho simples", client2, employee3);
 		ServicesPet ServPet3 = new ServicesPet(null, Priority.BAIXA, Status.ABERTO, "Banho", "Banho completo", client3, employee2);
+		ServicesPet ServPet4 = new ServicesPet(null, Priority.ALTA, Status.ANDAMENTO, "Consulta", "Consulta periódica", client4, employee4);
+		ServicesPet ServPet5 = new ServicesPet(null, Priority.ALTA, Status.ABERTO, "Cirurgia", "Cirurgia de emergência", client6, employee7);
 		
 		employeeRepository.saveAll(Arrays.asList(employee1, employee2, employee3, employee4, employee5, employee6, employee7, employee8, employee9, employee10));
 		clientRepository.saveAll(Arrays.asList(client1,client2,client3,client4,client5,client6));
-		petRpository.saveAll(Arrays.asList(ServPet1, ServPet2, ServPet3));
+		petRpository.saveAll(Arrays.asList(ServPet1, ServPet2, ServPet3, ServPet4, ServPet5));
 	}
 }
