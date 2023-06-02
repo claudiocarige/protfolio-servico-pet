@@ -50,7 +50,7 @@ public class EmployeeService {
    
 	public void delete(Integer id) {
 		Employee obj = findById(id);
-		if (obj.getServicePet().isEmpty()) {
+		if (obj.getServicePet().size() > 0){
 			throw new DataIntegrityViolationException(
 					"Este Funcionário possui ordem de serviço e não pode ser deletado!");
 		} else {
