@@ -3,6 +3,9 @@ package com.claudiocarige.portfoliclaudio.domain;
 import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -11,6 +14,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Entity
+@Data
+@Getter
+@Setter
 public class Client extends Person {
 
 	private static final long serialVersionUID = 1L;
@@ -38,13 +44,5 @@ public class Client extends Person {
 		this.password = obj.getPassword();
 		this.profile = obj.getProfile().stream().map(Profile::getCodigo).collect(Collectors.toSet());
 		this.createDate = obj.getCreateDate();
-	}
-
-	public List<ServicesPet> getServicesPet() {
-		return servicesPet;
-	}
-
-	public void setServicesPet(List<ServicesPet> servicesPet) {
-		this.servicesPet = servicesPet;
 	}
 }
