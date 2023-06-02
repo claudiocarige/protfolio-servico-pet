@@ -53,8 +53,6 @@ public abstract class Person implements Serializable{
 		this.password = password;
 	}
 
-
-
 	public Set<Profile> getProfile() {
 		return profile.stream().map(Profile::toEnum).collect(Collectors.toSet());
 	}
