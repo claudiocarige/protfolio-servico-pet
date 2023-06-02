@@ -3,7 +3,7 @@ package com.claudiocarige.portfoliclaudio.resources;
 import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
 import com.claudiocarige.portfoliclaudio.domain.dtos.ServicePetDTO;
 import com.claudiocarige.portfoliclaudio.services.ServicePetService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/servicepet")
+@RequiredArgsConstructor
 public class ServicePetResource {
 
-	@Autowired
-	private ServicePetService service;
+	private final ServicePetService service;
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ServicePetDTO> findById(@PathVariable Integer id) {
