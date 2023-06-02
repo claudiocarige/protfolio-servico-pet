@@ -1,11 +1,5 @@
 package com.claudiocarige.portfoliclaudio.services;
 
-import java.util.Arrays;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.claudiocarige.portfoliclaudio.domain.Client;
 import com.claudiocarige.portfoliclaudio.domain.Employee;
 import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
@@ -15,18 +9,20 @@ import com.claudiocarige.portfoliclaudio.domain.enums.Status;
 import com.claudiocarige.portfoliclaudio.repositories.ClientRepository;
 import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
 import com.claudiocarige.portfoliclaudio.repositories.ServicesPetRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 @Service
+@RequiredArgsConstructor
 public class DBService {
 	
-	@Autowired
-	private ClientRepository clientRepository;
-	@Autowired
-	private EmployeeRepository employeeRepository;
-	@Autowired
-	private ServicesPetRepository petRpository;
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	private final ClientRepository clientRepository;
+	private final EmployeeRepository employeeRepository;
+	private final ServicesPetRepository petRepository;
+	private final BCryptPasswordEncoder encoder;
 	
 	public void startDB() {
 		
@@ -57,6 +53,6 @@ public class DBService {
 		
 		employeeRepository.saveAll(Arrays.asList(employee1, employee2, employee3, employee4, employee5, employee6, employee7, employee8, employee9, employee10));
 		clientRepository.saveAll(Arrays.asList(client1,client2,client3,client4,client5,client6));
-		petRpository.saveAll(Arrays.asList(ServPet1, ServPet2, ServPet3, ServPet4, ServPet5));
+		petRepository.saveAll(Arrays.asList(ServPet1, ServPet2, ServPet3, ServPet4, ServPet5));
 	}
 }
