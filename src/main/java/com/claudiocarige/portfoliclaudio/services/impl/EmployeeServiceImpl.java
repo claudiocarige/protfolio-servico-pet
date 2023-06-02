@@ -5,6 +5,7 @@ import com.claudiocarige.portfoliclaudio.domain.Person;
 import com.claudiocarige.portfoliclaudio.domain.dtos.EmployeeDTO;
 import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
 import com.claudiocarige.portfoliclaudio.repositories.PersonRepository;
+import com.claudiocarige.portfoliclaudio.services.EmployeeService;
 import com.claudiocarige.portfoliclaudio.services.exceptions.DataIntegrityViolationException;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -17,28 +18,31 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class EmployeeService {
+public class EmployeeServiceImpl implements EmployeeService {
 
 	private final EmployeeRepository repository;
 	private final PersonRepository personRepository;
 	private final BCryptPasswordEncoder encoder;
 
+	@Override
 	public Employee findById(Integer id) {
 		Optional<Employee> employee = repository.findById(id);
 		return employee.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado. Id: " + id));
 	}
 
+	@Override
 	public List<Employee> findAll() {
 		return repository.findAll();
 	}
 
+	@Override
 	public Employee create(EmployeeDTO objDTO) {
 		objDTO.setId(null);
 		objDTO.setPassword(encoder.encode(objDTO.getPassword()));
 		validadorDeCpfEEmail(objDTO);
 		return repository.save(new Employee(objDTO));
 	}
-
+	@Override
 	public Employee update(Integer id, @Valid EmployeeDTO objDTO) {
 		objDTO.setId(id);
 		Employee oldObj = findById(id);
@@ -47,7 +51,8 @@ public class EmployeeService {
 		validadorDeCpfEEmail(objDTO);
 		return repository.save(new Employee(objDTO));
 	}
-   
+
+	@Override
 	public void delete(Integer id) {
 		Employee obj = findById(id);
 		if (obj.getServicePet().size() > 0){

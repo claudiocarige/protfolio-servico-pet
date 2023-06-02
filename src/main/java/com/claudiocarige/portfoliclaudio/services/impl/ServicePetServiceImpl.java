@@ -5,6 +5,7 @@ import com.claudiocarige.portfoliclaudio.domain.dtos.ServicePetDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Priority;
 import com.claudiocarige.portfoliclaudio.domain.enums.Status;
 import com.claudiocarige.portfoliclaudio.repositories.ServicesPetRepository;
+import com.claudiocarige.portfoliclaudio.services.ServicePetService;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,25 +18,28 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ServicePetService {
+public class ServicePetServiceImpl implements ServicePetService {
 
 	private final ServicesPetRepository repository;
 	private final ClientServiceImpl clientService;
-	private final EmployeeService employeeService;
+	private final EmployeeServiceImpl employeeService;
 
+	@Override
 	public ServicesPet findById(Integer id) {
 		Optional<ServicesPet> servicePet = repository.findById(id);
 		return servicePet.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado ID: " + id));
 	}
-
+	@Override
 	public List<ServicesPet> finAll() {
 		return repository.findAll();
 	}
 
+	@Override
 	public ServicesPet create(@Valid ServicePetDTO objDTO) {
 		return repository.save(toServicesPet(objDTO));
 	}
 
+	@Override
 	public ServicesPet update(Integer id, @Valid ServicePetDTO objDTO) {
 		objDTO.setId(id);
 		findById(id);

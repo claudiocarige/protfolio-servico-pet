@@ -1,10 +1,11 @@
-package com.claudiocarige.portfoliclaudio.services;
+package com.claudiocarige.portfoliclaudio.services.impl;
 
 import com.claudiocarige.portfoliclaudio.domain.Client;
 import com.claudiocarige.portfoliclaudio.domain.Person;
 import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
 import com.claudiocarige.portfoliclaudio.repositories.ClientRepository;
 import com.claudiocarige.portfoliclaudio.repositories.PersonRepository;
+import com.claudiocarige.portfoliclaudio.services.ClientService;
 import com.claudiocarige.portfoliclaudio.services.exceptions.DataIntegrityViolationException;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -16,54 +17,59 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ClientService {
+public class ClientServiceImpl implements ClientService {
 
-	private final ClientRepository repository;
+    private final ClientRepository repository;
 
-	private final PersonRepository personRepository;
-	
-	private final BCryptPasswordEncoder encoder;
+    private final PersonRepository personRepository;
 
-	public Client findById(Integer id) {
-		Optional<Client> employee = repository.findById(id);
-		return employee.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado Id: " + id));
-	}
+    private final BCryptPasswordEncoder encoder;
 
-	public List<Client> findAll() {
-		return repository.findAll();
-	}
+    @Override
+    public Client findById(Integer id) {
+        Optional<Client> employee = repository.findById(id);
+        return employee.orElseThrow(() -> new ObjectNotFoundException("Objeto não encontrado Id: " + id));
+    }
 
-	public Client create(ClientDTO objDTO) {
-		objDTO.setId(null);
-		objDTO.setPassword(encoder.encode(objDTO.getPassword()));
-		validadorDeCpfEEmail(objDTO);
-		return repository.save(new Client(objDTO));
-	}
+    @Override
+    public List<Client> findAll() {
+        return repository.findAll();
+    }
 
-	public Client update(Integer id, ClientDTO objDTO) {
-		objDTO.setId(id);
-		findById(id);
-		validadorDeCpfEEmail(objDTO);
-		return repository.save(new Client(objDTO));
-	}
+    @Override
+    public Client create(ClientDTO objDTO) {
+        objDTO.setId(null);
+        objDTO.setPassword(encoder.encode(objDTO.getPassword()));
+        validadorDeCpfEEmail(objDTO);
+        return repository.save(new Client(objDTO));
+    }
 
-	public void delete(Integer id) {
-		Client obj = findById(id);
-		if (obj.getServicesPet().size() > 0) {
-			throw new DataIntegrityViolationException("Este Cliente possui ordem de serviço e não pode ser deletado!");
-		} else {
-			repository.deleteById(id);
-		}
-	}
+    @Override
+    public Client update(Integer id, ClientDTO objDTO) {
+        objDTO.setId(id);
+        findById(id);
+        validadorDeCpfEEmail(objDTO);
+        return repository.save(new Client(objDTO));
+    }
 
-	private void validadorDeCpfEEmail(ClientDTO objDTO) {
-		Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());
-		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
-			throw new DataIntegrityViolationException("CPF já cadastrado no sistema!");
-		}
-		obj = personRepository.findByEmail(objDTO.getEmail());
-		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
-			throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
-		}
-	}
+    @Override
+    public void delete(Integer id) {
+        Client obj = findById(id);
+        if (obj.getServicesPet().size() > 0) {
+            throw new DataIntegrityViolationException("Este Cliente possui ordem de serviço e não pode ser deletado!");
+        } else {
+            repository.deleteById(id);
+        }
+    }
+
+    private void validadorDeCpfEEmail(ClientDTO objDTO) {
+        Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());
+        if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+            throw new DataIntegrityViolationException("CPF já cadastrado no sistema!");
+        }
+        obj = personRepository.findByEmail(objDTO.getEmail());
+        if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+            throw new DataIntegrityViolationException("E-mail já cadastrado no sistema!");
+        }
+    }
 }
