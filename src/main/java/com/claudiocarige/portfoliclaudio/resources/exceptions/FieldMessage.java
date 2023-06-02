@@ -1,38 +1,21 @@
 package com.claudiocarige.portfoliclaudio.resources.exceptions;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.io.Serializable;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FieldMessage implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	private String fieldname;
 	private String message;
-
-	public FieldMessage() {
-		super();
-	}
-
-	public FieldMessage(String fieldname, String message) {
-		super();
-		this.fieldname = fieldname;
-		this.message = message;
-	}
-
-	public String getFieldname() {
-		return fieldname;
-	}
-
-	public void setFieldname(String fieldname) {
-		this.fieldname = fieldname;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 }
