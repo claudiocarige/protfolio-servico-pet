@@ -1,45 +1,37 @@
 package com.claudiocarige.portfoliclaudio.resources;
 
+import com.claudiocarige.portfoliclaudio.domain.Client;
+import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
+import com.claudiocarige.portfoliclaudio.services.ClientService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import com.claudiocarige.portfoliclaudio.domain.Client;
-import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
-import com.claudiocarige.portfoliclaudio.services.ClientService;
-
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping(value = "/clients")
+@RequiredArgsConstructor
 public class ClientResource {
 
-	@Autowired
-	private ClientService service;
+	private final ClientService service;
 
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ClientDTO> findById(@PathVariable Integer id) {
-		Client obj = service.findById(id);
-		return ResponseEntity.ok().body(new ClientDTO(obj));
+		return ResponseEntity.ok().body(new ClientDTO(service.findById(id)));
 	}
 
 	@GetMapping
 	public ResponseEntity<List<ClientDTO>> findAll() {
-		List<Client> list = service.findAll();
-		List<ClientDTO> listDTO = list.stream().map(obj -> new ClientDTO(obj)).collect(Collectors.toList());
-		return ResponseEntity.ok().body(listDTO);
+		return ResponseEntity.ok()
+				.body(service.findAll()
+						.stream()
+						.map(ClientDTO::new)
+						.collect(Collectors.toList()));
 	}
 
 	@PostMapping
@@ -51,8 +43,7 @@ public class ClientResource {
 
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ClientDTO> update(@PathVariable Integer id, @Valid @RequestBody ClientDTO objDTO) {
-		Client obj = service.update(id, objDTO);
-		return ResponseEntity.ok().body(new ClientDTO(obj));
+		return ResponseEntity.ok().body(new ClientDTO(service.update(id, objDTO)));
 	}
 
 	@DeleteMapping(value = "/{id}")
