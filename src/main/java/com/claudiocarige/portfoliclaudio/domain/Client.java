@@ -1,15 +1,14 @@
 package com.claudiocarige.portfoliclaudio.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-
 import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Client extends Person {
@@ -37,7 +36,7 @@ public class Client extends Person {
 		this.cpf = obj.getCpf();
 		this.email = obj.getEmail();
 		this.password = obj.getPassword();
-		this.profile = obj.getProfile().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
+		this.profile = obj.getProfile().stream().map(Profile::getCodigo).collect(Collectors.toSet());
 		this.createDate = obj.getCreateDate();
 	}
 

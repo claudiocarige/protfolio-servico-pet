@@ -1,18 +1,16 @@
 package com.claudiocarige.portfoliclaudio.domain.dtos;
 
+import com.claudiocarige.portfoliclaudio.domain.Employee;
+import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.br.CPF;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import org.hibernate.validator.constraints.br.CPF;
-
-import com.claudiocarige.portfoliclaudio.domain.Employee;
-import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import javax.validation.constraints.NotNull;
 
 public class EmployeeDTO implements Serializable {
 
@@ -45,7 +43,7 @@ public class EmployeeDTO implements Serializable {
 		this.cpf = obj.getCpf();
 		this.email = obj.getEmail();
 		this.password = obj.getPassword();
-		this.profile = obj.getProfile().stream().map(x -> x.getCodigo()).collect(Collectors.toSet());
+		this.profile = obj.getProfile().stream().map(Profile::getCodigo).collect(Collectors.toSet());
 		this.createDate = obj.getCreateDate();
 		addProfile(Profile.EMPLOYEE);
 	}
