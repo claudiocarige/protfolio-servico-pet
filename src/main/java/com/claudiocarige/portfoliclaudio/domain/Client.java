@@ -44,5 +44,6 @@ public class Client extends Person {
 		this.password = obj.getPassword();
 		this.profile = obj.getProfile().stream().map(Profile::getCodigo).collect(Collectors.toSet());
 		this.createDate = obj.getCreateDate();
+		addProfile(Profile.CLIENT);
 	}
 }
