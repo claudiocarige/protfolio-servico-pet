@@ -1,35 +1,27 @@
 package com.claudiocarige.portfoliclaudio.services;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.claudiocarige.portfoliclaudio.domain.Client;
-import com.claudiocarige.portfoliclaudio.domain.Employee;
 import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
 import com.claudiocarige.portfoliclaudio.domain.dtos.ServicePetDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Priority;
 import com.claudiocarige.portfoliclaudio.domain.enums.Status;
 import com.claudiocarige.portfoliclaudio.repositories.ServicesPetRepository;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
+@RequiredArgsConstructor
 public class ServicePetService {
 
-	@Autowired
-	private ServicesPetRepository repository;
-
-	@Autowired
-	private ClientService clientService;
-
-	@Autowired
-	private EmployeeService employeeService;
+	private final ServicesPetRepository repository;
+	private final ClientService clientService;
+	private final EmployeeService employeeService;
 
 	public ServicesPet findById(Integer id) {
 		Optional<ServicesPet> servicePet = repository.findById(id);
@@ -41,30 +33,25 @@ public class ServicePetService {
 	}
 
 	public ServicesPet create(@Valid ServicePetDTO objDTO) {
-		return repository.save(newServicesPet(objDTO));
+		return repository.save(toServicesPet(objDTO));
 	}
 
 	public ServicesPet update(Integer id, @Valid ServicePetDTO objDTO) {
 		objDTO.setId(id);
-		ServicesPet oldServicesPet = findById(id);
-		oldServicesPet = newServicesPet(objDTO);
-		return repository.save(oldServicesPet);
+		findById(id);
+		return repository.save(toServicesPet(objDTO));
 	}
 
-	public ServicesPet newServicesPet(ServicePetDTO objDTO) {
-		Employee employee = employeeService.findById(objDTO.getEmployee());
-		Client client = clientService.findById(objDTO.getClient());
-
+	public ServicesPet toServicesPet(ServicePetDTO objDTO) {
 		ServicesPet servicesPet = new ServicesPet();
 		if (objDTO.getId() != null) {
 			servicesPet.setId(objDTO.getId());
 		}
-
 		if (objDTO.getStatus().equals(2)) {
 			servicesPet.setClosingDate(LocalDate.now());
 		}
-		servicesPet.setClient(client);
-		servicesPet.setEmployee(employee);
+		servicesPet.setClient(clientService.findById(objDTO.getClient()));
+		servicesPet.setEmployee(employeeService.findById(objDTO.getEmployee()));
 		servicesPet.setPriority(Priority.toEnum(objDTO.getPriority()));
 		servicesPet.setStatus(Status.toEnum(objDTO.getStatus()));
 		servicesPet.setTitle(objDTO.getTitle());
