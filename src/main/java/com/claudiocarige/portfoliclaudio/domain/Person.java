@@ -1,5 +1,10 @@
 package com.claudiocarige.portfoliclaudio.domain;
 
+import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
@@ -7,19 +12,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 @Entity
+@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public abstract class Person implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -35,17 +32,15 @@ public abstract class Person implements Serializable{
 	@Column(unique = true)
 	protected String email;
 	protected String password;
-	
+
+	@Getter(AccessLevel.NONE)
+	@Setter(AccessLevel.NONE)
 	@ElementCollection(fetch = FetchType.EAGER)
 	@CollectionTable(name = "PROFILE")
 	protected Set<Integer> profile = new HashSet<>();
 	
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate createDate = LocalDate.now();
-	
-	public Person() {
-		super();
-	}
 
 	public Person(Integer id, String name, String cpf, String email, String password) {
 		super();
@@ -56,60 +51,14 @@ public abstract class Person implements Serializable{
 		this.password = password;
 	}
 
-	public Integer getId() {
-		return id;
-	}
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String cpf) {
-		this.cpf = cpf;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public void setEmail(String email) {
-		this.email = email;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 
 	public Set<Profile> getProfile() {
-		return profile.stream().map(x -> Profile.toEnum(x)).collect(Collectors.toSet());
+		return profile.stream().map(Profile::toEnum).collect(Collectors.toSet());
 	}
 
 	public void addProfile(Profile prof) {
 		this.profile.add(prof.getCodigo());
-	}
-
-	public LocalDate getCreateDate() {
-		return createDate;
-	}
-
-	public void setCreateDate(LocalDate createDate) {
-		this.createDate = createDate;
 	}
 
 	@Override
