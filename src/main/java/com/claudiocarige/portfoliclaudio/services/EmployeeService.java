@@ -1,14 +1,5 @@
 package com.claudiocarige.portfoliclaudio.services;
 
-import java.util.List;
-import java.util.Optional;
-
-import javax.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import com.claudiocarige.portfoliclaudio.domain.Employee;
 import com.claudiocarige.portfoliclaudio.domain.Person;
 import com.claudiocarige.portfoliclaudio.domain.dtos.EmployeeDTO;
@@ -16,18 +7,21 @@ import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
 import com.claudiocarige.portfoliclaudio.repositories.PersonRepository;
 import com.claudiocarige.portfoliclaudio.services.exceptions.DataIntegrityViolationException;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class EmployeeService {
 
-	@Autowired
-	private EmployeeRepository repository;
-
-	@Autowired
-	private PersonRepository personRepository;
-	
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	private final EmployeeRepository repository;
+	private final PersonRepository personRepository;
+	private final BCryptPasswordEncoder encoder;
 
 	public Employee findById(Integer id) {
 		Optional<Employee> employee = repository.findById(id);
@@ -42,24 +36,21 @@ public class EmployeeService {
 		objDTO.setId(null);
 		objDTO.setPassword(encoder.encode(objDTO.getPassword()));
 		validadorDeCpfEEmail(objDTO);
-		Employee newEmployee = new Employee(objDTO);
-		return repository.save(newEmployee);
+		return repository.save(new Employee(objDTO));
 	}
 
 	public Employee update(Integer id, @Valid EmployeeDTO objDTO) {
 		objDTO.setId(id);
 		Employee oldObj = findById(id);
-		if(!objDTO.getPassword().equals(oldObj.getPassword())) {
-			objDTO.setPassword(encoder.encode(objDTO.getPassword()));
-		} 
+		if(!objDTO.getPassword().equals(oldObj.getPassword())){
+			objDTO.setPassword(encoder.encode(objDTO.getPassword()));}
 		validadorDeCpfEEmail(objDTO);
-		oldObj = new Employee(objDTO);
-		return repository.save(oldObj);
+		return repository.save(new Employee(objDTO));
 	}
    
 	public void delete(Integer id) {
 		Employee obj = findById(id);
-		if (obj.getServicePet().size() > 0) {
+		if (obj.getServicePet().isEmpty()) {
 			throw new DataIntegrityViolationException(
 					"Este Funcionário possui ordem de serviço e não pode ser deletado!");
 		} else {
