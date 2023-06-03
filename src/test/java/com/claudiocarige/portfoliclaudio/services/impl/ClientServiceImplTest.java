@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -166,7 +167,23 @@ class ClientServiceImplTest {
 
     }
     @Test
-    void update() {
+    void whenUpdateThenReturnSuccess() {
+
+        when(encoder.encode(PASSWORD)).thenReturn("123456");
+        when(clientRepository.save(any(Client.class))).thenReturn(client);
+        when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
+        when(personRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
+
+        Client response = clientService.create(clientDTO);
+
+        assertEquals(client, response);
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
+        assertEquals(LocalDate.now(), response.getCreateDate());
+        assertTrue(response.getProfile().containsAll(Arrays.asList(Profile.ADMIN, Profile.CLIENT)));
     }
 
     @Test
@@ -176,6 +193,7 @@ class ClientServiceImplTest {
     public void StartModels(){
         client = new Client(ID, NAME, CPF, EMAIL, PASSWORD);
         client.addProfile(Profile.CLIENT);
+        client.addProfile(Profile.ADMIN);
         clientDTO = new ClientDTO(client);
         optionalClient = Optional.of(client);
     }
