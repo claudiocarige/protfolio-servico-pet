@@ -4,6 +4,7 @@ import com.claudiocarige.portfoliclaudio.domain.Client;
 import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.claudiocarige.portfoliclaudio.repositories.ClientRepository;
+import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -29,6 +30,7 @@ class ClientServiceImplTest {
     public static final String PASSWORD = "123456";
     public static final Profile PROFILE = Profile.CLIENT;
     public static final LocalDate DATE = LocalDate.now();
+    public static final String OBJECT_NOT_FOUND = "Object not found";
     @InjectMocks
     private ClientServiceImpl clientService;
 
@@ -60,6 +62,18 @@ class ClientServiceImplTest {
         assertEquals(CPF, response.getCpf());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
+    }
+
+    @Test
+    void whenFindByIdThenReturnAObjectNotFoundException(){
+        when(clientRepository.findById(anyInt())).thenThrow(new ObjectNotFoundException(OBJECT_NOT_FOUND));
+        try {
+            clientService.findById(ID);
+        }catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJECT_NOT_FOUND, ex.getMessage());
+
+        }
     }
 
     @Test
