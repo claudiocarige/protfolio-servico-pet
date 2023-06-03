@@ -5,6 +5,7 @@ import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.claudiocarige.portfoliclaudio.repositories.ClientRepository;
 import com.claudiocarige.portfoliclaudio.repositories.PersonRepository;
+import com.claudiocarige.portfoliclaudio.services.exceptions.DataIntegrityViolationException;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -133,6 +133,38 @@ class ClientServiceImplTest {
         assertTrue(response.getProfile().contains(Profile.CLIENT));
     }
 
+    @Test
+    void whenCreateWhitExistingCpfThenReturnAnDataIntegrityViolationException(){
+        when(encoder.encode(PASSWORD)).thenReturn("123456");
+        when(personRepository.findByCpf(CPF)).thenReturn(Optional.of(client));
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            clientService.create(clientDTO);
+        });
+        try {
+            optionalClient.get().setId(2);
+            clientService.create(clientDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals("CPF já cadastrado no sistema!", ex.getMessage());
+        }
+
+    }
+
+    @Test
+    void whenCreateWhitExistingEmailThenReturnAnDataIntegrityViolationException(){
+        when(encoder.encode(PASSWORD)).thenReturn("123456");
+        when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
+        when(personRepository.findByCpf(EMAIL)).thenReturn(Optional.of(client));
+
+        try {
+            clientService.create(clientDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals("E-mail já cadastrado no sistema!", ex.getMessage());
+        }
+
+    }
     @Test
     void update() {
     }
