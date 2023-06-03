@@ -31,6 +31,7 @@ class ClientServiceImplTest {
     public static final Profile PROFILE = Profile.CLIENT;
     public static final LocalDate DATE = LocalDate.now();
     public static final String OBJECT_NOT_FOUND = "Object not found";
+    public static final int INDEX = 0;
     @InjectMocks
     private ClientServiceImpl clientService;
 
@@ -72,12 +73,22 @@ class ClientServiceImplTest {
         }catch (Exception ex){
             assertEquals(ObjectNotFoundException.class, ex.getClass());
             assertEquals(OBJECT_NOT_FOUND, ex.getMessage());
-
         }
     }
 
     @Test
-    void findAll() {
+    void whenFindAllThenReturnAnListClient() {
+        when(clientRepository.findAll()).thenReturn(List.of(client,
+                new Client(20, "Maria","15915573720", "dantas@gmail.com", "123456")));
+        List<Client> response =clientService.findAll();
+        assertNotNull(response);
+        assertEquals(2, response.size());
+        assertEquals(Client.class, response.get(INDEX).getClass());
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NAME, response.get(INDEX).getName());
+        assertEquals(CPF, response.get(INDEX).getCpf());
+        assertEquals(EMAIL, response.get(INDEX).getEmail());
+        assertEquals(PASSWORD, response.get(INDEX).getPassword());
     }
 
     @Test
