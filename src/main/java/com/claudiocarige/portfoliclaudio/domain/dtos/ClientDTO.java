@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ClientDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -52,6 +53,10 @@ public class ClientDTO implements Serializable {
 		this.profile = obj.getProfile().stream().map(Profile::getCodigo).collect(Collectors.toSet());
 		this.createDate = obj.getCreateDate();
 }
+
+	public ClientDTO(int id, String name, String cpf, String email, String password) {
+	}
+
 	public Set<Profile> getProfile() {
 		return profile.stream().map(Profile::toEnum).collect(Collectors.toSet());
 	}

@@ -46,4 +46,5 @@ public class Client extends Person {
 		this.createDate = obj.getCreateDate();
 		addProfile(Profile.CLIENT);
 	}
+
 }
