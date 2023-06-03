@@ -54,9 +54,6 @@ public class ClientDTO implements Serializable {
 		this.createDate = obj.getCreateDate();
 }
 
-	public ClientDTO(int id, String name, String cpf, String email, String password) {
-	}
-
 	public Set<Profile> getProfile() {
 		return profile.stream().map(Profile::toEnum).collect(Collectors.toSet());
 	}

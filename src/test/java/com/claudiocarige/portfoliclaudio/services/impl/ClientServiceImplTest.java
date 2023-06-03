@@ -4,20 +4,24 @@ import com.claudiocarige.portfoliclaudio.domain.Client;
 import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.claudiocarige.portfoliclaudio.repositories.ClientRepository;
+import com.claudiocarige.portfoliclaudio.repositories.PersonRepository;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -28,15 +32,20 @@ class ClientServiceImplTest {
     public static final String CPF = "47683364347";
     public static final String EMAIL = "coisinho01@mail.com";
     public static final String PASSWORD = "123456";
-    public static final Profile PROFILE = Profile.CLIENT;
     public static final LocalDate DATE = LocalDate.now();
-    public static final String OBJECT_NOT_FOUND = "Object not found";
+    public static final String OBJECT_NOT_FOUND = "Objeto não encontrado Id: 11";
     public static final int INDEX = 0;
     @InjectMocks
     private ClientServiceImpl clientService;
 
     @Mock
     private ClientRepository clientRepository;
+
+    @Mock
+    private BCryptPasswordEncoder encoder;
+
+    @Mock
+    private PersonRepository personRepository;
 
     private Client client;
 
@@ -71,7 +80,11 @@ class ClientServiceImplTest {
 
     @Test
     void whenFindByIdThenReturnAObjectNotFoundException(){
-        when(clientRepository.findById(anyInt())).thenThrow(new ObjectNotFoundException(OBJECT_NOT_FOUND));
+        when(clientRepository.findById(anyInt())).thenReturn(Optional.empty());
+        assertThrows(ObjectNotFoundException.class, () -> {
+           clientService.findById(ID);
+        });
+        verify(clientRepository, Mockito.times(1)).findById(11);
         try {
             clientService.findById(ID);
         }catch (Exception ex){
@@ -93,10 +106,31 @@ class ClientServiceImplTest {
         assertEquals(CPF, response.get(INDEX).getCpf());
         assertEquals(EMAIL, response.get(INDEX).getEmail());
         assertEquals(PASSWORD, response.get(INDEX).getPassword());
+        assertEquals(client.getProfile().size(), response.get(INDEX).getProfile().size());
+        assertTrue(client.getProfile().containsAll(response.get(INDEX).getProfile()));
+        assertEquals(DATE, response.get(INDEX).getCreateDate());
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnSuccess() {
+
+        client.getProfile().add(Profile.CLIENT);
+
+        when(encoder.encode(PASSWORD)).thenReturn("123456");
+        when(clientRepository.save(any(Client.class))).thenReturn(client);
+        when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
+        when(personRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
+
+        Client response = clientService.create(clientDTO);
+
+        assertEquals(client, response);
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
+        assertEquals(LocalDate.now(), response.getCreateDate());
+        assertTrue(response.getProfile().contains(Profile.CLIENT));
     }
 
     @Test
@@ -109,7 +143,8 @@ class ClientServiceImplTest {
 
     public void StartModels(){
         client = new Client(ID, NAME, CPF, EMAIL, PASSWORD);
-        clientDTO = new ClientDTO(ID, NAME, CPF, EMAIL, PASSWORD);
+        client.addProfile(Profile.CLIENT);
+        clientDTO = new ClientDTO(client);
         optionalClient = Optional.of(client);
     }
 }
