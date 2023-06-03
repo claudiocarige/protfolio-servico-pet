@@ -63,6 +63,10 @@ class ClientServiceImplTest {
         assertEquals(CPF, response.getCpf());
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
+        assertEquals(client.getProfile().size(), response.getProfile().size());
+        assertTrue(client.getProfile().containsAll(response.getProfile()));
+        assertEquals(DATE, response.getCreateDate());
+        verify(clientRepository, Mockito.times(1)).findById(ID);
     }
 
     @Test
