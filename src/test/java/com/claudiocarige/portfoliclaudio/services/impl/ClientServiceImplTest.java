@@ -55,15 +55,13 @@ class ClientServiceImplTest {
 
     private Optional<Client> optionalClient;
 
-    private List<Client> list;
-
     @BeforeEach
     void setUp() {
-        StartModels();
+        startModels();
     }
 
     @Test
-    void WhenFindByIdThenReturnAnClientInstanc() {
+    void whenFindByIdThenReturnAnClientInstanc() {
         when(clientRepository.findById(anyInt())).thenReturn(optionalClient);
 
         Client response = clientService.findById(ID);
@@ -83,9 +81,7 @@ class ClientServiceImplTest {
     @Test
     void whenFindByIdThenReturnAObjectNotFoundException() {
         when(clientRepository.findById(anyInt())).thenReturn(Optional.empty());
-        assertThrows(ObjectNotFoundException.class, () -> {
-            clientService.findById(ID);
-        });
+        assertThrows(ObjectNotFoundException.class, () -> clientService.findById(ID));
         verify(clientRepository, Mockito.times(1)).findById(11);
         try {
             clientService.findById(ID);
@@ -138,9 +134,7 @@ class ClientServiceImplTest {
         when(encoder.encode(PASSWORD)).thenReturn("123456");
         when(personRepository.findByCpf(CPF)).thenReturn(Optional.of(client));
 
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            clientService.create(clientDTO);
-        });
+        assertThrows(DataIntegrityViolationException.class, () -> clientService.create(clientDTO));
         try {
             optionalClient.get().setId(2);
             clientService.create(clientDTO);
@@ -185,7 +179,7 @@ class ClientServiceImplTest {
     }
 
     @Test
-    void DeleteWithSuccess() {
+    void deleteWithSuccess() {
         when(clientRepository.findById(ID)).thenReturn(optionalClient);
         doNothing().when(clientRepository).deleteById(anyInt());
         clientService.delete(ID);
@@ -193,18 +187,16 @@ class ClientServiceImplTest {
     }
 
     @Test
-    void DeleteWithDataIntegrityViolationException() {
+    void deleteWithDataIntegrityViolationException() {
         List<ServicesPet> servicePet = new ArrayList<>();
         servicePet.add(new ServicesPet());
         client.setServicesPet(servicePet);
         when(clientRepository.findById(ID)).thenReturn(Optional.of(client));
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            clientService.delete(ID);
-        });
+        assertThrows(DataIntegrityViolationException.class, () -> clientService.delete(ID));
         verify(clientRepository, never()).deleteById(ID);
     }
 
-    public void StartModels() {
+    public void startModels() {
         client = new Client(ID, NAME, CPF, EMAIL, PASSWORD);
         client.addProfile(Profile.CLIENT);
         client.addProfile(Profile.ADMIN);
