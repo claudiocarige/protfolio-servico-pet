@@ -1,6 +1,7 @@
 package com.claudiocarige.portfoliclaudio.services.impl;
 
 import com.claudiocarige.portfoliclaudio.domain.Client;
+import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
 import com.claudiocarige.portfoliclaudio.domain.dtos.ClientDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.claudiocarige.portfoliclaudio.repositories.ClientRepository;
@@ -16,14 +17,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest
 class ClientServiceImplTest {
@@ -65,7 +66,7 @@ class ClientServiceImplTest {
     void WhenFindByIdThenReturnAnClientInstanc() {
         when(clientRepository.findById(anyInt())).thenReturn(optionalClient);
 
-        Client response =clientService.findById(ID);
+        Client response = clientService.findById(ID);
         assertNotNull(response);
         assertEquals(Client.class, response.getClass());
         assertEquals(ID, response.getId());
@@ -80,15 +81,15 @@ class ClientServiceImplTest {
     }
 
     @Test
-    void whenFindByIdThenReturnAObjectNotFoundException(){
+    void whenFindByIdThenReturnAObjectNotFoundException() {
         when(clientRepository.findById(anyInt())).thenReturn(Optional.empty());
         assertThrows(ObjectNotFoundException.class, () -> {
-           clientService.findById(ID);
+            clientService.findById(ID);
         });
         verify(clientRepository, Mockito.times(1)).findById(11);
         try {
             clientService.findById(ID);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             assertEquals(ObjectNotFoundException.class, ex.getClass());
             assertEquals(OBJECT_NOT_FOUND, ex.getMessage());
         }
@@ -97,8 +98,8 @@ class ClientServiceImplTest {
     @Test
     void whenFindAllThenReturnAnListClient() {
         when(clientRepository.findAll()).thenReturn(List.of(client,
-                new Client(20, "Maria","15915573720", "dantas@gmail.com", "123456")));
-        List<Client> response =clientService.findAll();
+                new Client(20, "Maria", "15915573720", "dantas@gmail.com", "123456")));
+        List<Client> response = clientService.findAll();
         assertNotNull(response);
         assertEquals(2, response.size());
         assertEquals(Client.class, response.get(INDEX).getClass());
@@ -115,7 +116,6 @@ class ClientServiceImplTest {
     @Test
     void whenCreateThenReturnSuccess() {
 
-        client.getProfile().add(Profile.CLIENT);
         when(encoder.encode(PASSWORD)).thenReturn("123456");
         when(clientRepository.save(any(Client.class))).thenReturn(client);
         when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
@@ -130,11 +130,11 @@ class ClientServiceImplTest {
         assertEquals(EMAIL, response.getEmail());
         assertEquals(PASSWORD, response.getPassword());
         assertEquals(LocalDate.now(), response.getCreateDate());
-        assertTrue(response.getProfile().contains(Profile.CLIENT));
+        assertTrue(response.getProfile().containsAll(Arrays.asList(Profile.ADMIN, Profile.CLIENT)));
     }
 
     @Test
-    void whenCreateWhitExistingCpfThenReturnAnDataIntegrityViolationException(){
+    void whenCreateWhitExistingCpfThenReturnAnDataIntegrityViolationException() {
         when(encoder.encode(PASSWORD)).thenReturn("123456");
         when(personRepository.findByCpf(CPF)).thenReturn(Optional.of(client));
 
@@ -144,37 +144,35 @@ class ClientServiceImplTest {
         try {
             optionalClient.get().setId(2);
             clientService.create(clientDTO);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             assertEquals(DataIntegrityViolationException.class, ex.getClass());
             assertEquals("CPF já cadastrado no sistema!", ex.getMessage());
         }
-
     }
 
     @Test
-    void whenCreateWhitExistingEmailThenReturnAnDataIntegrityViolationException(){
+    void whenCreateWhitExistingEmailThenReturnAnDataIntegrityViolationException() {
         when(encoder.encode(PASSWORD)).thenReturn("123456");
         when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
-        when(personRepository.findByCpf(EMAIL)).thenReturn(Optional.of(client));
+        when(personRepository.findByEmail(EMAIL)).thenReturn(Optional.of(client));
 
         try {
             clientService.create(clientDTO);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             assertEquals(DataIntegrityViolationException.class, ex.getClass());
             assertEquals("E-mail já cadastrado no sistema!", ex.getMessage());
         }
-
     }
+
     @Test
     void whenUpdateThenReturnSuccess() {
 
-        when(clientRepository.findById(ID)).thenReturn(Optional.of(client));
-        when(encoder.encode(PASSWORD)).thenReturn("123456");
+        when(clientRepository.findById(ID)).thenReturn(optionalClient);
         when(clientRepository.save(any(Client.class))).thenReturn(client);
         when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
         when(personRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
 
-        Client response = clientService.update(ID,clientDTO);
+        Client response = clientService.update(ID, clientDTO);
 
         assertEquals(client, response);
         assertEquals(ID, response.getId());
@@ -187,10 +185,26 @@ class ClientServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void DeleteWithSuccess() {
+        when(clientRepository.findById(ID)).thenReturn(optionalClient);
+        doNothing().when(clientRepository).deleteById(anyInt());
+        clientService.delete(ID);
+        verify(clientRepository, times(1)).deleteById(anyInt());
     }
 
-    public void StartModels(){
+    @Test
+    void DeleteWithDataIntegrityViolationException() {
+        List<ServicesPet> servicePet = new ArrayList<>();
+        servicePet.add(new ServicesPet());
+        client.setServicesPet(servicePet);
+        when(clientRepository.findById(ID)).thenReturn(Optional.of(client));
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            clientService.delete(ID);
+        });
+        verify(clientRepository, never()).deleteById(ID);
+    }
+
+    public void StartModels() {
         client = new Client(ID, NAME, CPF, EMAIL, PASSWORD);
         client.addProfile(Profile.CLIENT);
         client.addProfile(Profile.ADMIN);
