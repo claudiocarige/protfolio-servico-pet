@@ -116,7 +116,6 @@ class ClientServiceImplTest {
     void whenCreateThenReturnSuccess() {
 
         client.getProfile().add(Profile.CLIENT);
-
         when(encoder.encode(PASSWORD)).thenReturn("123456");
         when(clientRepository.save(any(Client.class))).thenReturn(client);
         when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
@@ -169,12 +168,13 @@ class ClientServiceImplTest {
     @Test
     void whenUpdateThenReturnSuccess() {
 
+        when(clientRepository.findById(ID)).thenReturn(Optional.of(client));
         when(encoder.encode(PASSWORD)).thenReturn("123456");
         when(clientRepository.save(any(Client.class))).thenReturn(client);
         when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
         when(personRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
 
-        Client response = clientService.create(clientDTO);
+        Client response = clientService.update(ID,clientDTO);
 
         assertEquals(client, response);
         assertEquals(ID, response.getId());
