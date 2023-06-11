@@ -27,9 +27,9 @@ import static org.mockito.Mockito.*;
 class EmployeeServiceImplTest {
 
     public static final int ID = 1;
-    public static final String NAME = "Marcos";
-    public static final String CPF = "89496531504";
-    public static final String EMAIL = "ccarige@gmail.com";
+    public static final String NAME = "Fulano de tal 01";
+    public static final String CPF = "41024767760";
+    public static final String EMAIL = "fulano01@mail.com";
     public static final String PASSWORD = "123456";
     public static final LocalDate DATE = LocalDate.now();
     public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado. Id: 1";
@@ -138,7 +138,37 @@ class EmployeeServiceImplTest {
         }
     }
     @Test
-    void update() {
+    void whenCreateWhitExistingEmailThenReturnAnDataIntegrityViolationException() {
+        when(encoder.encode(PASSWORD)).thenReturn("123456");
+        when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
+        when(personRepository.findByEmail(EMAIL)).thenReturn(Optional.of(employee));
+
+        try{
+            employeeService.create(employeeDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals("E-mail já cadastrado no sistema!", ex.getMessage());
+        }
+    }
+    @Test
+    void whenUpdateThenReturnSuccess() {
+
+        when(employeeRepository.findById(ID)).thenReturn(optionalEmployee);
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
+        when(encoder.encode(employeeDTO.getPassword())).thenReturn("123456");
+        when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
+        when(personRepository.findByEmail(EMAIL)).thenReturn(Optional.of(employee));
+
+        Employee response = employeeService.update(ID, employeeDTO);
+
+        assertNotNull(response);
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
+        assertEquals(LocalDate.now(), response.getCreateDate());
+        assertTrue(response.getProfile().containsAll(Arrays.asList(Profile.EMPLOYEE, Profile.ADMIN)));
     }
 
     @Test
