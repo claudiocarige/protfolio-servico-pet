@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,7 +106,21 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void create() {
+    void whenCreateThenReturnSuccesss() {
+        when(encoder.encode(PASSWORD)).thenReturn("123456");
+        when(employeeRepository.save(any(Employee.class))).thenReturn(employee);
+        when(personRepository.findByCpf(CPF)).thenReturn(Optional.empty());
+        when(personRepository.findByEmail(EMAIL)).thenReturn(Optional.empty());
+
+        Employee response = employeeService.create(employeeDTO);
+        assertEquals(employee, response);
+        assertEquals(ID, response.getId());
+        assertEquals(NAME, response.getName());
+        assertEquals(CPF, response.getCpf());
+        assertEquals(EMAIL, response.getEmail());
+        assertEquals(PASSWORD, response.getPassword());
+        assertEquals(LocalDate.now(), response.getCreateDate());
+        assertTrue(response.getProfile().containsAll(Arrays.asList(Profile.EMPLOYEE, Profile.ADMIN)));
     }
 
     @Test
