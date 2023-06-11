@@ -5,6 +5,7 @@ import com.claudiocarige.portfoliclaudio.domain.dtos.EmployeeDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
 import com.claudiocarige.portfoliclaudio.repositories.PersonRepository;
+import com.claudiocarige.portfoliclaudio.services.exceptions.DataIntegrityViolationException;
 import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -122,7 +123,20 @@ class EmployeeServiceImplTest {
         assertEquals(LocalDate.now(), response.getCreateDate());
         assertTrue(response.getProfile().containsAll(Arrays.asList(Profile.EMPLOYEE, Profile.ADMIN)));
     }
+    @Test
+    void whenCreateWhitExistingCpfThenReturnAnDataIntegrityViolationException() {
+        when(encoder.encode(PASSWORD)).thenReturn("123456");
+        when(personRepository.findByCpf(CPF)).thenReturn(Optional.of(employee));
 
+        assertThrows(DataIntegrityViolationException.class, () -> employeeService.create(employeeDTO));
+        try{
+            optionalEmployee.get().setId(2);
+            employeeService.create(employeeDTO);
+        }catch (Exception ex){
+            assertEquals(DataIntegrityViolationException.class, ex.getClass());
+            assertEquals("CPF já cadastrado no sistema!", ex.getMessage());
+        }
+    }
     @Test
     void update() {
     }
