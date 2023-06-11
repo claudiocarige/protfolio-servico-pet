@@ -35,7 +35,7 @@ public class EmployeeResource {
 						.collect(Collectors.toList()));
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PostMapping
 	public ResponseEntity<EmployeeDTO> create(@Valid @RequestBody EmployeeDTO objDTO){
 		Employee newObj = service.create(objDTO);
@@ -44,14 +44,14 @@ public class EmployeeResource {
 		return ResponseEntity.created(uri).build(); 
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<EmployeeDTO> update(@PathVariable Integer id, 
 												@Valid @RequestBody EmployeeDTO objDTO){
 		return ResponseEntity.ok().body(new EmployeeDTO(service.update(id, objDTO)));
 	}
 	
-	@PreAuthorize("hasAnyRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
 	@DeleteMapping(value ="/{id}")
 	public ResponseEntity<EmployeeDTO> delete(@PathVariable Integer id){
 		service.delete(id);
