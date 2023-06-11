@@ -1,6 +1,7 @@
 package com.claudiocarige.portfoliclaudio.services.impl;
 
 import com.claudiocarige.portfoliclaudio.domain.Employee;
+import com.claudiocarige.portfoliclaudio.domain.ServicesPet;
 import com.claudiocarige.portfoliclaudio.domain.dtos.EmployeeDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -177,6 +179,16 @@ class EmployeeServiceImplTest {
         doNothing().when(employeeRepository).deleteById(anyInt());
         employeeService.delete(ID);
         verify(employeeRepository, times(1)).deleteById(anyInt());
+    }
+
+    @Test
+    void whenDeleteWithDataIntegrityViolationException() {
+        List<ServicesPet> servicePet = new ArrayList<>();
+        servicePet.add(new ServicesPet());
+        employee.setServicePet(servicePet);
+        when(employeeRepository.findById(ID)).thenReturn(optionalEmployee);
+        assertThrows(DataIntegrityViolationException.class,() -> employeeService.delete(ID));
+        verify(employeeRepository, never()).deleteById(ID);
     }
 
     public void startModel(){
