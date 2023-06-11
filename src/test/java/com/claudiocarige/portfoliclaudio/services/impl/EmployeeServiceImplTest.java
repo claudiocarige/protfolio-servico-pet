@@ -5,6 +5,7 @@ import com.claudiocarige.portfoliclaudio.domain.dtos.EmployeeDTO;
 import com.claudiocarige.portfoliclaudio.domain.enums.Profile;
 import com.claudiocarige.portfoliclaudio.repositories.EmployeeRepository;
 import com.claudiocarige.portfoliclaudio.repositories.PersonRepository;
+import com.claudiocarige.portfoliclaudio.services.exceptions.ObjectNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -16,7 +17,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -28,6 +29,7 @@ class EmployeeServiceImplTest {
     public static final String EMAIL = "ccarige@gmail.com";
     public static final String PASSWORD = "123456";
     public static final LocalDate DATE = LocalDate.now();
+    public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado. Id: 1";
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
@@ -53,7 +55,7 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void findById() {
+    void whenFindByIdThenReturnAEmployeeInstance() {
         when(employeeRepository.findById(anyInt())).thenReturn(optionalEmployee);
 
         Employee response = employeeService.findById(ID);
@@ -70,6 +72,18 @@ class EmployeeServiceImplTest {
         verify(employeeRepository, times(1)).findById(ID);
     }
 
+    @Test
+    void whenFindByIdThenReturnAObjectNotFoundException() {
+        when(employeeRepository.findById(anyInt())).thenReturn(Optional.empty());
+        assertThrows(ObjectNotFoundException.class, () -> employeeService.findById(ID));
+        verify(employeeRepository, times(1)).findById(ID);
+        try{
+            employeeService.findById(ID);
+        }catch (Exception ex){
+            assertEquals(ObjectNotFoundException.class, ex.getClass());
+            assertEquals(OBJETO_NAO_ENCONTRADO, ex.getMessage());
+        }
+    }
     @Test
     void findAll() {
     }
