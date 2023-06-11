@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +31,7 @@ class EmployeeServiceImplTest {
     public static final String PASSWORD = "123456";
     public static final LocalDate DATE = LocalDate.now();
     public static final String OBJETO_NAO_ENCONTRADO = "Objeto não encontrado. Id: 1";
+    public static final int INDEX = 0;
     @InjectMocks
     private EmployeeServiceImpl employeeService;
 
@@ -85,7 +87,21 @@ class EmployeeServiceImplTest {
         }
     }
     @Test
-    void findAll() {
+    void whenFindAllThenRetunrAnListEmployee() {
+        when(employeeRepository.findAll()).thenReturn(List.of(employee,
+                new Employee(20, "Maria", "15915573720", "dantas@gmail.com", "123456")));
+        List<Employee> response = employeeService.findAll();
+        assertNotNull(response);
+        assertEquals(2, response.size());
+        assertEquals(Employee.class, response.get(INDEX).getClass());
+        assertEquals(ID, response.get(INDEX).getId());
+        assertEquals(NAME, response.get(INDEX).getName());
+        assertEquals(CPF, response.get(INDEX).getCpf());
+        assertEquals(EMAIL, response.get(INDEX).getEmail());
+        assertEquals(PASSWORD, response.get(INDEX).getPassword());
+        assertEquals(employee.getProfile(), response.get(INDEX).getProfile());
+        assertEquals(DATE, response.get(INDEX).getCreateDate());
+        assertTrue(employee.getProfile().containsAll(response.get(INDEX).getProfile()));
     }
 
     @Test
