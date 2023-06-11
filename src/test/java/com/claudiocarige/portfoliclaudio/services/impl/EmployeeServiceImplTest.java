@@ -172,7 +172,11 @@ class EmployeeServiceImplTest {
     }
 
     @Test
-    void delete() {
+    void whenDeleteThenReturnSuccess() {
+        when(employeeRepository.findById(ID)).thenReturn(optionalEmployee);
+        doNothing().when(employeeRepository).deleteById(anyInt());
+        employeeService.delete(ID);
+        verify(employeeRepository, times(1)).deleteById(anyInt());
     }
 
     public void startModel(){
